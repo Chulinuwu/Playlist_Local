@@ -65,3 +65,6 @@ Build for production:
 ```bash
 npm run build
 ```
+
+![localhost_5174](https://github.com/user-attachments/assets/546b257f-82fc-43fc-a195-70e55d2dca2c)
+
