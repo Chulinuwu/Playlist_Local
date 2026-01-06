@@ -25,9 +25,8 @@
         }
     });
 
-    // When song changes
     $effect(() => {
-        const _ = $currentSong; // Dependency
+        const _ = $currentSong;
         if ($currentSong && audio) {
               setTimeout(() => {
                   if (audio) audio.play().catch(() => {});
@@ -49,7 +48,6 @@
 
     function nextSong() {
         if ($allSongs.length === 0) return;
-        
         let nextIndex = 0;
         if ($currentSong) {
             const currentIndex = $allSongs.findIndex(s => s.id === $currentSong?.id);
@@ -65,12 +63,10 @@
 
     function previousSong() {
         if ($allSongs.length === 0) return;
-        
         if (currentTime > 3 && audio) {
             audio.currentTime = 0;
             return;
         }
-
         let prevIndex = 0;
         if ($currentSong) {
             const currentIndex = $allSongs.findIndex(s => s.id === $currentSong?.id);
@@ -127,7 +123,6 @@
 </script>
 
 <div class="flex items-center justify-between w-full h-full max-w-[100vw] px-2">
-    <!-- Now Playing Info -->
     <div class="flex items-center gap-4 min-w-[180px] w-[30%]">
         {#if $currentSong}
             <div class="w-14 h-14 bg-zinc-800 flex items-center justify-center rounded-md shadow-2xl relative group overflow-hidden">
@@ -145,7 +140,6 @@
         {/if}
     </div>
 
-    <!-- Controls -->
     <div class="flex flex-col items-center gap-2 flex-1 max-w-[600px]">
         <div class="flex items-center gap-6">
             <button 
@@ -204,7 +198,6 @@
         </div>
     </div>
 
-    <!-- Volume -->
     <div class="flex items-center justify-end gap-3 w-[30%] min-w-[150px]">
         <Volume2 size={20} class="text-zinc-400 hover:text-white transition-colors cursor-pointer" />
         <div class="w-24 group flex items-center">

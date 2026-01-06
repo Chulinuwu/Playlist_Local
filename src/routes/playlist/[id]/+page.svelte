@@ -1,19 +1,11 @@
 
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { page } from '$app/stores'; // Deprecated in SvelteKit 2 but let's check store
-    import { page as pageState } from '$app/state'; // Svelte 5 style access
-     
-    // Svelte 5 + Kit 2: params are via load function usually, or $page store. 
-    // Let's use `page` from $app/state if available or props.
-    
+    import { page as pageState } from '$app/state';
     import { Clock, Play, Trash2, ListMusic, Pause } from 'lucide-svelte';
     import { currentSong, isPlaying } from '$lib/store';
     import type { ClientSong } from '$lib/store';
 
-    let { data } = $props(); // If we use load function
-    // But I'm doing client side fetching for simplicity in this turn constraint
-    
     let playlistId = $derived(pageState.params.id);
     let playlist: any = $state(null);
     let allSongs: ClientSong[] = [];
@@ -21,15 +13,10 @@
 
     async function loadData() {
         if (!playlistId) return;
-        
-        // Load playlist
         const pRes = await fetch(`/api/playlists/${playlistId}`);
         if(pRes.ok) playlist = await pRes.json();
-        
-        // Load all songs to map IDs to details (inefficient but works for small local app)
         const sRes = await fetch('/api/songs');
         if(sRes.ok) allSongs = await sRes.json();
-
         updatePlaylistSongs();
     }
 
@@ -40,15 +27,12 @@
 
     async function removeSong(songId: string) {
         if (!confirm('Remove this song from playlist?')) return;
-        
         const newSongs = playlist.songs.filter((id: string) => id !== songId);
-        
         const res = await fetch(`/api/playlists/${playlistId}`, {
             method: 'PUT',
             body: JSON.stringify({ songs: newSongs }),
             headers: {'Content-Type': 'application/json'}
         });
-        
         if (res.ok) {
             playlist = await res.json();
             updatePlaylistSongs();
@@ -75,7 +59,6 @@
 
 {#if playlist}
 	<div class="flex flex-col min-h-full bg-black">
-		<!-- Dynamic Header -->
 		<header class="relative px-8 pt-20 pb-8 flex items-end gap-6 bg-linear-to-b from-indigo-900/20 to-black">
 			<div class="w-60 h-60 bg-zinc-800 shadow-2xl rounded-lg flex items-center justify-center overflow-hidden group relative">
 				<div class="absolute inset-0 bg-linear-to-br from-indigo-500/10 to-transparent"></div>
@@ -96,7 +79,6 @@
 			</div>
 		</header>
 
-		<!-- Action Bar -->
 		<div class="px-8 py-6 flex items-center justify-between sticky top-0 z-10 bg-black mx-2 rounded-b-xl">
 			<div class="flex items-center gap-8">
 				<button 
@@ -113,7 +95,6 @@
 			</div>
 		</div>
 
-		<!-- Song Table -->
 		<div class="px-8 pb-20">
 			<table class="w-full text-left border-separate border-spacing-y-1">
 				<thead>
@@ -156,7 +137,6 @@
 								3:00
 							</td>
 							
-							<!-- Action Menu -->
 							<td class="py-3 pr-4 align-middle rounded-r-lg text-right relative">
 								<button
 									onclick={() => removeSong(song.id)}

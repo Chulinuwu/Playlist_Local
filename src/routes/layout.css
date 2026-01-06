@@ -26,7 +26,6 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for a cleaner look */
 ::-webkit-scrollbar {
 	width: 12px;
 }

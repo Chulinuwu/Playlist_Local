@@ -1,3 +1,4 @@
+
 <script lang="ts">
 	import './layout.css';
 	import { onMount } from 'svelte';
@@ -55,9 +56,7 @@
 
 <div class="h-screen w-screen flex flex-col bg-black text-white overflow-hidden selection:bg-spotify-green/30">
 	<div class="flex-1 flex overflow-hidden p-2 gap-2">
-		<!-- Sidebar -->
 		<aside class="w-72 flex flex-col gap-2">
-			<!-- Nav Section -->
 			<nav class="bg-zinc-900/20 rounded-xl p-4 flex flex-col gap-4 border border-white/5">
 				<a
 					href="/"
@@ -75,7 +74,6 @@
 				</a>
 			</nav>
 
-			<!-- Library Section -->
 			<div class="flex flex-1 flex-col overflow-hidden rounded-xl bg-zinc-900/20 border border-white/5">
 				<div class="flex items-center justify-between p-4 shadow-md">
 					<div class="flex items-center gap-3 px-2 font-bold text-zinc-400">
@@ -129,7 +127,6 @@
 			</div>
 		</aside>
 
-		<!-- Main Content -->
 		<main class="relative flex flex-1 flex-col overflow-hidden rounded-xl bg-black shadow-2xl">
 			<div class="custom-scrollbar relative flex-1 overflow-y-auto">
 				{@render children()}
@@ -137,7 +134,6 @@
 		</main>
 	</div>
 
-	<!-- Player Footer -->
 	<footer class="h-24 bg-black px-4 flex items-center justify-between z-20">
 		<Player />
 	</footer>

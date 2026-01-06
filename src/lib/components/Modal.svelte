@@ -1,3 +1,4 @@
+
 <script lang="ts">
 	import { X } from 'lucide-svelte';
 	import { fade, scale } from 'svelte/transition';
@@ -36,7 +37,6 @@
 			role="dialog"
 			tabindex="0"
 		>
-			<!-- Header -->
 			<div class="flex items-center justify-between p-6 pb-2">
 				<h2 class="text-2xl font-black tracking-tight text-white">{title}</h2>
 				<button
@@ -47,7 +47,6 @@
 				</button>
 			</div>
 
-			<!-- Body -->
 			<div class="p-6">
 				{@render children()}
 			</div>

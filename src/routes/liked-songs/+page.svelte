@@ -1,3 +1,4 @@
+
 <script lang="ts">
     import { onMount } from 'svelte';
     import { Clock, Play, MoreHorizontal, ListMusic, Search, Heart, Pause } from 'lucide-svelte';
@@ -9,7 +10,6 @@
     let showPlaylistMenuFor: string | null = $state(null);
 
     async function loadData() {
-        // Load all songs
         const sRes = await fetch('/api/songs');
         if (sRes.ok) {
             songs = await sRes.json();
@@ -40,7 +40,6 @@
             body: JSON.stringify({ song_id: songId }),
             headers: { 'Content-Type': 'application/json' }
         });
-
         if (res.ok) {
             $likedSongs = $likedSongs.filter(id => id !== songId);
             updateLikedList();
@@ -50,15 +49,12 @@
     async function addToPlaylist(songId: string, playlistId: string) {
         const p = $playlists.find(pl => pl.id === playlistId);
         if (!p) return;
-        
         const newSongs = [...(p.songs || []), songId];
-        
         const res = await fetch(`/api/playlists/${playlistId}`, {
             method: 'PUT',
             body: JSON.stringify({ songs: newSongs }),
             headers: {'Content-Type': 'application/json'}
         });
-        
         if (res.ok) {
             const updated = await res.json();
             $playlists = $playlists.map(pl => pl.id === playlistId ? updated : pl);

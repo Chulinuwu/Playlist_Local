@@ -9,9 +9,7 @@
     let songs: ClientSong[] = $state([]);
     let filteredSongs: ClientSong[] = $state([]);
     let searchQuery = $state('');
-    let showPlaylistMenuFor: string | null = $state(null); // Song ID
-    
-    // Modal state
+    let showPlaylistMenuFor: string | null = $state(null);
     let isCreateModalOpen = $state(false);
     let newPlaylistName = $state('');
     let pendingSongId: string | null = $state(null);
@@ -20,7 +18,7 @@
         const res = await fetch('/api/songs');
         if (res.ok) {
             songs = await res.json();
-            $allSongs = songs; // For player navigation
+            $allSongs = songs;
             filterSongs();
         }
     }
@@ -30,10 +28,7 @@
             filteredSongs = songs;
         } else {
             const lowerQ = searchQuery.toLowerCase();
-            filteredSongs = songs.filter(s => 
-                s.title.toLowerCase().includes(lowerQ) || 
-                s.artist.toLowerCase().includes(lowerQ)
-            );
+            filteredSongs = songs.filter(s => s.title.toLowerCase().includes(lowerQ) || s.artist.toLowerCase().includes(lowerQ));
         }
     }
 
@@ -53,13 +48,11 @@
     async function toggleLike(songId: string) {
         const isLiked = $likedSongs.includes(songId);
         const method = isLiked ? 'DELETE' : 'POST';
-        
         const res = await fetch('/api/liked-songs', {
             method,
             body: JSON.stringify({ song_id: songId }),
             headers: { 'Content-Type': 'application/json' }
         });
-
         if (res.ok) {
             if (isLiked) {
                 $likedSongs = $likedSongs.filter(id => id !== songId);
@@ -78,13 +71,11 @@
 
     async function handleCreateAndAdd() {
         if (!newPlaylistName.trim() || !pendingSongId) return;
-
         const res = await fetch('/api/playlists', {
             method: 'POST',
             body: JSON.stringify({ name: newPlaylistName }),
             headers: { 'Content-Type': 'application/json' }
         });
-
         if (res.ok) {
             const newPlaylist = await res.json();
             $playlists = [newPlaylist, ...$playlists];
@@ -97,20 +88,16 @@
     async function addToPlaylist(songId: string, playlistId: string) {
         const p = $playlists.find(pl => pl.id === playlistId);
         if (!p) return;
-        
         if (p.songs?.includes(songId)) {
             alert('Song already in playlist');
             return;
         }
-        
         const newSongs = [...(p.songs || []), songId];
-        
         const res = await fetch(`/api/playlists/${playlistId}`, {
             method: 'PUT',
             body: JSON.stringify({ songs: newSongs }),
             headers: {'Content-Type': 'application/json'}
         });
-        
         if (res.ok) {
             const updated = await res.json();
             $playlists = $playlists.map(pl => pl.id === playlistId ? updated : pl);
@@ -122,7 +109,6 @@
 </script>
 
 <div class="flex flex-col min-h-full bg-black">
-	<!-- Dynamic Header -->
 	<header class="relative px-8 pt-20 pb-8 flex items-end gap-6 bg-linear-to-b from-spotify-green/20 to-black">
 		<div class="w-60 h-60 bg-zinc-800 shadow-2xl rounded-lg flex items-center justify-center overflow-hidden group relative">
 			{#if songs.length > 0}
@@ -171,7 +157,6 @@
 		</div>
 	</div>
 
-	<!-- Song Table -->
 	<div class="px-8 pb-20">
 		<table class="w-full text-left border-separate border-spacing-y-1">
 			<thead>
@@ -226,7 +211,6 @@
 							</div>
 						</td>
 						
-						<!-- Action Menu -->
 						<td class="py-3 pr-4 align-middle rounded-r-lg text-right relative">
 							<button
 								onclick={(e) => {
