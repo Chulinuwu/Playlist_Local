@@ -1,38 +1,67 @@
-# sv
+# Playlist Local
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Local music player with playlist management using SvelteKit and Supabase.
 
-## Creating a project
+## Prerequisites
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Node.js (Latest LTS recommended)
+- Supabase Project
 
-```sh
-# create a new project in the current directory
-npx sv create
+## Installation
 
-# create a new project in my-app
-npx sv create my-app
+1. Install dependencies:
+
+```bash
+npm install
 ```
 
-## Developing
+2. Environment Configuration:
+   Create a `.env` file in the root directory and add your Supabase credentials:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```env
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-```sh
+3. Database Schema Setup:
+   Execute the following SQL in your Supabase SQL Editor to initialize the required tables and extensions:
+
+```sql
+create extension if not exists "uuid-ossp";
+
+create table playlists (
+  id uuid primary key default uuid_generate_v4(),
+  name text not null,
+  description text,
+  songs text[] default '{}',
+  created_at timestamp with time zone default now()
+);
+
+create table liked_songs (
+  id uuid primary key default uuid_generate_v4(),
+  song_id text not null unique,
+  created_at timestamp with time zone default now()
+);
+```
+
+4. Local Assets:
+
+- Create a `downloads` directory in the project root.
+- Place audio files (`.mp3`, `.webm`) in the `downloads` folder.
+- Metadata is extracted from filenames. Recommended format: `Artist - Title.mp3`.
+
+## Development
+
+Run the development server:
+
+```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+## Production
 
-To create a production version of your app:
+Build for production:
 
-```sh
+```bash
 npm run build
 ```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
